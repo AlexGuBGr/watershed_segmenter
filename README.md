@@ -1,5 +1,5 @@
 # watershed_segmenter
-Scripts for instance segmentation of adipocytes 
+Small Python (v3.10.6) scripts to estimate the number and sizes of adipocytes in sets of adipocyte images. Python packages used for the image preparation and segmentation were OpenCV, Scikit-image, SciPy and Numpy. Python packages used for visualization and data compilation were Matplotlib, Seaborn and Pandas.  
 
 ## Run segmentation.py
 ```python segmentation.py -path [your_path] -output_name [your_output_name]```
