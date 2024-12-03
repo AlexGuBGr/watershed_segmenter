@@ -15,6 +15,7 @@ import pandas as pd
 import seaborn as sns
 #from scipy import stats
 #from statsmodels.stats.multitest import multipletests
+#import os
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -24,18 +25,18 @@ parser.add_argument("-output_name", type=str, required=False, default="output")
 
 args = parser.parse_args()
 
-order = ['group 1', 'group 2', 'group 3', 'group 4', 'group 5', 'group 6', 'group 7', 'group 8', 'group 9', 'group 10']
-
 disk3 = disk(3)
 disk2 = disk(2)
 disk1 = disk(1)
+order = ["st32_Visfat"]
+
 
 def ul(array):
     q1 = np.percentile(array, 25)
     q3 = np.percentile(array, 75)
     iqr = q3 - q1
     fl = q1 - (1.5*iqr)
-    fh = q3 + (1.5*iqr)
+    fh = q3 + (1.5*iqr) 
     return fl, fh
 
 
@@ -104,7 +105,7 @@ def get_all_distances_above_zero(dct):
 def remover_template(ccm, cm, dc, thrs):
     remove = {}
     for k,v in cm.items():
-        group = k.split("/")[-2]
+        group = k.split("/")[-3] # changed this 
         print(k, group)
         areas = dist_clusters[group][k][1]
         conn_comps = dist_clusters[group][k][0]
@@ -146,7 +147,7 @@ def plotter(dct_imgs, dct_denoised, dct_instance_seg, filename):
     
             fig, axs = plt.subplots(1,3) #8
             fig.set_size_inches(50, 50) #50,50
-            na = " - ".join(kk.split("/")[-2:]) + " \n "
+            na = " - ".join(kk.split("/")[-3:]) + " \n "
             axs[0].imshow(dct_imgs[k][kk], cmap = "gray")
             axs[0].set_title(na + "Original gray scale")
             axs[1].imshow(dct_denoised[k][kk], cmap = "gray")
@@ -199,7 +200,7 @@ def get_cell_count_area(dct, name):
     out_dct = dict(img_names = [], cell_area = [], img_area = [], percentage = [])
     for k,v in dct.items():
         for kk,vv in v.items():
-            n = "_".join(kk.split("/")[-2:])
+            n = "_".join(kk.split("/")[-3:])
             u,c = np.unique(vv, return_counts=True)
             sc = np.sum(c[1:])
             tot = np.prod(vv.shape)
@@ -213,18 +214,18 @@ def get_cell_count_area(dct, name):
 
 if __name__ == "__main__":
 
-    main_path = args.path#"drive-download-20230901T081504Z-001/"
-    groups = glob.glob1(main_path, "*")
     dct_paths = {}
-    print("Finding images using the path '{}'".format(args.path))
+    m = args.path
+    groups = glob.glob1(m, "*")
+    print("Finding images using the path '{}'".format(m))
     for i in groups:
         dct_paths[i] = []
-        mg = main_path + i + "/"
-        tmp_img = glob.glob1(mg, "*")
-    
-        dct_paths[i] = [mg + ii for ii in tmp_img]
-        
-    
+        mm = m + "/" + i
+        for ii in glob.glob1(mm, "*"):
+            mmm = mm + "/" + ii
+            for iii in glob.glob1(mmm, "*"):
+                dct_paths[i].append( mmm + "/" + iii )
+
     print("Preparing images for segmentation...")
     dist = {}
     dct_imgs = {}
