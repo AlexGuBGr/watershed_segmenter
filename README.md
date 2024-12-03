@@ -18,22 +18,8 @@ The ```-path``` argument expects a folder with the following structure:
     ├── image6.tif
 ```
 
-## Run new_batch_segmentation.py
-```python new_batch_segmentation.py -path [your_path] -output_name [your_output_name]```
-
-The ```-path``` argument expects a ZIP folder with the following structure:
-```
-[your_path]
-├── group 1
-│   ├── image1.tif
-│   ├── image2.tif
-├── group 2
-    ├── image3.tif
-    ├── image4.tif
-```
-
-## Run segmentation_3.py
-```python segmentation_3.py -path [your_path] -output_name [your_output_name]```
+## Run segmentation_4.py
+```python segmentation_4.py -path [your_path] -output_name [your_output_name]```
 
 The ```-path``` argument expects a folder with the following structure:
 ```
