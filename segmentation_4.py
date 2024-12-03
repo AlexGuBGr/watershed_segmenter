@@ -28,7 +28,7 @@ args = parser.parse_args()
 disk3 = disk(3)
 disk2 = disk(2)
 disk1 = disk(1)
-order = ["st32_Visfat"]
+order = ["st32_Visfat"] # the order of folder1, folder2. If there is only one folder --> not relevant
 
 
 def ul(array):
