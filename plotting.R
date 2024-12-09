@@ -53,6 +53,12 @@ boxplotter <- function(strr, st32vis, logg, fact, test, alt, colr, ylab, name) {
     st32vis$Cell_size <- log10(st32vis$Cell_size)
   }
   
+  
+  ns <- unique(st32vis$lables)
+  df <- data.frame(do.call( rbind, lapply(ns, FUN = function(x) { tmp <- st32vis$Cell_size[st32vis$lables == x];  list( mean = mean( tmp), median = median( tmp) )  } )))
+  rownames(df) <- ns
+  writexl::write_xlsx(df, path = paste0(name, "_mean_median.xlsx"))
+  
   if (class(test) != "function") {
     
     ps <- rep(NA, length(comps))
@@ -93,17 +99,18 @@ boxplotter <- function(strr, st32vis, logg, fact, test, alt, colr, ylab, name) {
     
     pl <- ggplot(st32vis[grepl(strr,st32vis$time),], aes(x=lables, y=Cell_size, fill = lables )) + 
       geom_boxplot() +
-      geom_signif(comparisons = comps, annotations = anno,
-                  map_signif_level=siglvl, y_position= ypox, test = wilcox.test )
+      geom_signif(comparisons = comps, annotations = anno, color = "black",
+                  #map_signif_level=siglvl, 
+                  y_position= ypox, test = wilcox.test ) #+ stat_summary(fun=mean, geom="point", shape="_", size=9, color="#4C4C4C", fill="#4C4C4C") + stat_summary(fun=mean, geom="point", shape="|", size=4, color="#4C4C4C", fill="#4C4C4C")
     pl <- pl + scale_fill_manual(values = rgb_colors) + theme_classic() + labs(y = ylab, x = NULL) + ylim(0.7, 4)
     
   } else {
     
     pl <- ggplot(st32vis[grepl(strr,st32vis$time),], aes(x=lables, y=Cell_size, color = lables )) + 
       geom_boxplot() +
-      geom_signif(comparisons = comps, annotations = anno,
+      geom_signif(comparisons = comps, annotations = anno, color = "black",
                   #map_signif_level=siglvl, 
-                  y_position= ypox, test = wilcox.test )
+                  y_position= ypox, test = wilcox.test ) #+ stat_summary(fun=mean, geom="point", shape="_", size=9, color="#4C4C4C", fill="#4C4C4C") + stat_summary(fun=mean, geom="point", shape="|", size=4, color="#4C4C4C", fill="#4C4C4C")
     pl <- pl + scale_color_manual(values = rgb_colors) + theme_classic() + labs(y = ylab, x = NULL) + ylim(0.7, 4)
   }
   
@@ -194,6 +201,13 @@ boxplotter44 <- function(strr, st32vis, logg, fact, test, alt, colr, ylab, name)
     st32vis$Cell_size <- log10(st32vis$Cell_size)
   }
   
+  
+  ns <- unique(st32vis$lables)
+  df <- data.frame(do.call( rbind, lapply(ns, FUN = function(x) { tmp <- st32vis$Cell_size[st32vis$lables == x];  list( mean = mean( tmp), median = median( tmp) )  } )))
+  rownames(df) <- ns
+  writexl::write_xlsx(df, path = paste0(name, "_mean_median.xlsx"))
+  
+  
   ps <- p_n_adjp(comps, 
                  st32vis$Cell_size,
                  st32vis$lables,
@@ -222,12 +236,11 @@ boxplotter44 <- function(strr, st32vis, logg, fact, test, alt, colr, ylab, name)
   
   pl <- ggplot(st32vis, aes(x=lables, y=Cell_size, fill = lables )) + 
     geom_boxplot() +
-    geom_signif(comparisons = comps, annotations = anno,
-                y_position= ypos, test = wilcox.test )
+    geom_signif(comparisons = comps, annotations = anno, color = "black",
+                y_position= ypos, test = wilcox.test ) #+ stat_summary(fun=mean, geom="point", shape="_", size=7, color="#4C4C4C", fill="#4C4C4C") + stat_summary(fun=mean, geom="point", shape="|", size=2.5, color="#4C4C4C", fill="#4C4C4C")
   
   pl <- pl + scale_fill_manual(values = rgb_colors) + theme_classic() + labs(y = ylab, x = NULL) +
     scale_x_discrete(labels= subcatvec) + ylim(0.7, 4.3)
-  
   
   pl
   ggsave(name, units = "cm", width = 16, height = 10, dpi=300)
