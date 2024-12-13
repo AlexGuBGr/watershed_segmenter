@@ -55,9 +55,14 @@ boxplotter <- function(strr, st32vis, logg, fact, test, alt, colr, ylab, name) {
   
   
   ns <- unique(st32vis$lables)
-  df <- data.frame(do.call( rbind, lapply(ns, FUN = function(x) { tmp <- st32vis$Cell_size[st32vis$lables == x];  list( mean = mean( tmp), median = median( tmp) )  } )))
+  df <- data.frame(t(sapply(ns, FUN = function(x) { tmp <- st32vis$Cell_size[st32vis$lables == x];  c( mean( tmp), median( tmp) )  } ) ))
+  print(df)
+  colnames(df) <- c("mean (log10)", "median (log10")
   rownames(df) <- ns
+  df[["group"]] <- ns
+  print(df)
   writexl::write_xlsx(df, path = paste0(name, "_mean_median.xlsx"))
+  
   
   if (class(test) != "function") {
     
@@ -203,8 +208,12 @@ boxplotter44 <- function(strr, st32vis, logg, fact, test, alt, colr, ylab, name)
   
   
   ns <- unique(st32vis$lables)
-  df <- data.frame(do.call( rbind, lapply(ns, FUN = function(x) { tmp <- st32vis$Cell_size[st32vis$lables == x];  list( mean = mean( tmp), median = median( tmp) )  } )))
+  df <- data.frame(t(sapply(ns, FUN = function(x) { tmp <- st32vis$Cell_size[st32vis$lables == x];  c( mean( tmp), median( tmp) )  } ) ))
+  print(df)
+  colnames(df) <- c("mean (log10)", "median (log10")
   rownames(df) <- ns
+  df[["group"]] <- ns
+  print(df)
   writexl::write_xlsx(df, path = paste0(name, "_mean_median.xlsx"))
   
   
